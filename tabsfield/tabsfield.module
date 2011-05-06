@@ -106,10 +106,10 @@ function tabsfield_field_widget_form(&$form, &$form_state, $field, $instance, $l
         );
 
         $element['content'] = array(
-            '#type' => 'textarea',//text_format',
+            '#type' => text_format',
             '#title' => t('Tab Content'),
             '#default_value' => isset($items[$delta]['content']) ? $items[$delta]['content'] : NULL,
-            //'#format' => isset($edit['format']) ? $edit['format'] : NULL,
+            '#format' => isset($edit['format']) ? $edit['format'] : NULL,
         );
         
         $element['has_offerte'] = array(
