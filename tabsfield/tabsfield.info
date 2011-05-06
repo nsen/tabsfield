@@ -1,0 +1,6 @@
+name = Tabbladen Veld
+description = Een nieuwe vorm van tabbladen
+
+dependencies[] = field_ui
+
+core = 7.x

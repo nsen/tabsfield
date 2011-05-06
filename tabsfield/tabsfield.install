@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function tabsfield_install() {
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function tabsfield_uninstall() {
+
+}
+
+/**
+ * Implementation of hook_field_schema().
+ */
+function tabsfield_field_schema($field) {
+
+    if ($field['type'] == 'tabsfield') {
+
+        $schema['columns']['name'] = array(
+            'type' => 'varchar',
+            'length' => '255',
+            'not null' => FALSE,
+        );
+
+        $schema['columns']['content'] = array(
+            'type' => 'text',
+            'not null' => FALSE,
+        );
+
+        $schema['columns']['content_format'] = array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => FALSE,
+            'description' => 'The {filter_format}.format of the content.',
+        );
+
+        $schema['columns']['has_offerte'] = array(
+            'type' => 'int',
+            'not null' => FALSE,
+        );
+
+        $schema['indexes'] = array(
+            'name' => array('name'),
+        );
+
+        $schema['foreign keys'] = array(
+            'content_format' => array(
+                'table' => 'filter_format',
+                'columns' => array('content_format' => 'format'),
+            ),
+        );
+
+        return $schema;
+    }
+}

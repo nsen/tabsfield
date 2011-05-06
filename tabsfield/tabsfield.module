@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * Implementation of hook_field_info().
+ */
+function tabsfield_field_info() {
+    return array(
+        'tabsfield' => array(
+            'label' => t('Tabbladen'),
+            'description' => t('Aanmaken en beheren van tabbladen'),
+            'default_widget' => 'tabsfield_tabsfield_form',
+            'default_formatter' => 'tabsfield_default',
+        ),
+    );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function tabsfield_field_widget_info() {
+    return array(
+        'tabsfield_tabsfield_form' => array(
+            'label' => t('tabsfield form'),
+            'field types' => array('tabsfield'),
+            'behaviors' => array(
+                'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+                //Use FIELD_BEHAVIOR_NONE for no default value. ~ Okeuj
+                'default value' => FIELD_BEHAVIOR_NONE,
+            ),
+        ),
+    );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function tabsfield_field_formatter_info() {
+    return array(
+        'tabsfield_default' => array(
+            'label' => t('Default'),
+            'field types' => array('tabsfield'),
+        ),
+    );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function tabsfield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+    $element = array();
+
+    switch ($display['type']) {
+        case 'tabsfield_default':
+            foreach ($items as $delta => $item) {
+                $element[$delta]['#markup'] = theme('tabsfield_formatter_default', $item);
+            }
+            break;
+    }
+
+    return $element;
+}
+
+/**
+ * Implementation of hook_field_is_empty().
+ */
+function tabsfield_field_is_empty($item, $field) {
+    if ($field['type'] == 'tabsfield' && empty($item['name']) && empty($item['content']))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+/**
+ * Implementation of hook_field_settings_form().
+ */
+function tabsfield_field_settings_form($field, $instance, $has_data) {
+    if ($field['type'] == 'tabsfield') {
+        $settings = $field['settings'];
+        $form = array();
+        return $form;
+    }
+}
+
+/**
+ * Implementation of hook_field_validate().
+ */
+function tabsfield_field_validate($obj_type, $object, $field, $instance, $langcode, &$items, &$errors) {
+    if ($field['type'] == 'tabsfield') {
+
+    }
+}
+
+/**
+ * Implementation of hook_field_widget_form().
+ */
+function tabsfield_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+    $base = $element;
+    if ($instance['widget']['type'] == 'tabsfield_tabsfield_form') {
+        $widget = $instance['widget'];
+        $settings = $widget['settings'];
+
+        $element['name'] = array(
+            '#type' => 'textfield',
+            '#title' => t('Tab Name'),
+            '#default_value' => isset($items[$delta]['name']) ? $items[$delta]['name'] : NULL,
+        );
+
+        $element['content'] = array(
+            '#type' => 'textarea',//text_format',
+            '#title' => t('Tab Content'),
+            '#default_value' => isset($items[$delta]['content']) ? $items[$delta]['content'] : NULL,
+            //'#format' => isset($edit['format']) ? $edit['format'] : NULL,
+        );
+        
+        $element['has_offerte'] = array(
+            '#type' => 'checkbox',
+            '#title' => t('Heeft Offerte Boxje?'),
+            '#default_value' => isset($items[$delta]['has_offerte']) ? $items[$delta]['has_offerte'] : 1,
+        );
+    }
+    return $element;
+}
+
+function tabsfield_theme($existing, $type, $theme, $path) {
+    return array(
+        'tabsfield_formatter_default' => array(
+            'variables' => array('item' => NULL),
+        ),
+    );
+}
